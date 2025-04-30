@@ -40,7 +40,7 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
-        return redirect('/home');
+        return redirect('/dashboard'); // diubah dari /home
     }
 
     public function registerAdmin(Request $request)
@@ -59,7 +59,7 @@ class AuthController extends Controller
         ]);
 
         Auth::login($admin);
-        return redirect('/home');
+        return redirect('/dashboard'); // diubah dari /home
     }
 
     public function login(Request $request)
@@ -67,7 +67,8 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            return redirect('/home');
+            $request->session()->regenerate();
+            return redirect('/dashboard'); // diubah dari /home
         }
 
         return back()->withErrors(['email' => 'Email atau password salah.']);
