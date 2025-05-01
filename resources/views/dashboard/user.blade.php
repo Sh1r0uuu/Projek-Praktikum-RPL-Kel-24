@@ -14,10 +14,9 @@
             <span class="font-bold text-lg">MyResep</span>
         </div>
         <div class="flex items-center space-x-6 text-sm">
-            <a href="#" class="hover:underline">Tambah Resep</a>
             <a href="#" class="hover:underline">Beranda</a>
             <a href="#" class="hover:underline">Favorit</a>
-            <a href="#" class="hover:underline">Admin</a>
+            <a href="#" class="hover:underline">User</a>
         </div>
     </nav>
 

@@ -94,24 +94,12 @@
             font-weight: bold;
             margin-top: 20px;
         }
-        .admin-link {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background-color: #133c1f;
-            color: #fff;
-            padding: 8px 16px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 14px;
-        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="form-section">
-        <a href="{{ route('login') }}" class="admin-link">Login Sebagai Admin</a>
         <h2>Get Started Now</h2>
         <form action="{{ url('/register') }}" method="POST">
             @csrf

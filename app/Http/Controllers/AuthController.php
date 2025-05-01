@@ -40,7 +40,7 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
-        return redirect('/dashboard'); // diubah dari /home
+        return redirect()->route('user.dashboard');
     }
 
     public function registerAdmin(Request $request)
@@ -59,7 +59,7 @@ class AuthController extends Controller
         ]);
 
         Auth::login($admin);
-        return redirect('/dashboard'); // diubah dari /home
+        return redirect()->route('admin.dashboard');
     }
 
     public function login(Request $request)
@@ -68,7 +68,13 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect('/dashboard'); // diubah dari /home
+            $user = Auth::user();
+
+            if ($user->role === 'admin') {
+                return redirect()->route('admin.dashboard');
+            } else {
+                return redirect()->route('user.dashboard');
+            }
         }
 
         return back()->withErrors(['email' => 'Email atau password salah.']);
