@@ -16,6 +16,7 @@ class DashboardController extends Controller
 
     public function admin()
     {
-        return view('dashboard.admin');
+        $recipes = Recipe::latest()->take(6)->get(); // tambahkan ini
+        return view('dashboard.admin', compact('recipes'));
     }
 }

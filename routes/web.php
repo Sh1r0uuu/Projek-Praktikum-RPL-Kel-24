@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RecipeController;
+use App\Http\Controllers\ProfileController; // Tambahan controller profil
 
 // Redirect root to login
 Route::get('/', fn () => redirect('/login'));
@@ -21,15 +22,23 @@ Route::post('/register/admin', [AuthController::class, 'registerAdmin']);
 
 // Protected routes
 Route::middleware(['auth'])->group(function () {
+
     // Dashboard berdasarkan role
     Route::get('/dashboard/user', [DashboardController::class, 'user'])->name('user.dashboard');
     Route::get('/dashboard/admin', [DashboardController::class, 'admin'])->name('admin.dashboard');
 
-    // Jika ingin tetap menyimpan route lama, bisa redirect berdasarkan role
+    // Redirect berdasarkan role
     Route::get('/dashboard', function () {
         $user = auth()->user();
         return $user->role === 'admin'
             ? redirect()->route('admin.dashboard')
             : redirect()->route('user.dashboard');
     })->name('dashboard');
+
+    // Profile Page
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+
+    // Tambahan route untuk edit dan update profil
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 });

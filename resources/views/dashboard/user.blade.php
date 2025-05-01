@@ -14,9 +14,9 @@
             <span class="font-bold text-lg">MyResep</span>
         </div>
         <div class="flex items-center space-x-6 text-sm">
-            <a href="#" class="hover:underline">Beranda</a>
+            <a href="{{ route('user.dashboard') }}" class="hover:underline">Beranda</a>
             <a href="#" class="hover:underline">Favorit</a>
-            <a href="#" class="hover:underline">User</a>
+            <a href="{{ route('profile') }}" class="hover:underline">User</a>
         </div>
     </nav>
 
