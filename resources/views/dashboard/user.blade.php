@@ -16,7 +16,16 @@
         <div class="flex items-center space-x-6 text-sm">
             <a href="{{ route('user.dashboard') }}" class="hover:underline">Beranda</a>
             <a href="#" class="hover:underline">Favorit</a>
-            <a href="{{ route('profile') }}" class="hover:underline">User</a>
+
+            @auth
+                <a href="{{ route('profile') }}" class="hover:underline">Profil</a>
+                <form action="{{ route('logout') }}" method="POST" class="inline">
+                    @csrf
+                    <button type="submit" class="hover:underline">Logout</button>
+                </form>
+            @else
+                <a href="{{ route('login') }}" class="hover:underline font-semibold text-green-800">Sign in</a>
+            @endauth
         </div>
     </nav>
 
