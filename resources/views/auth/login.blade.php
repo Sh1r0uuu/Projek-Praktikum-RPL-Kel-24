@@ -128,7 +128,7 @@
 
             <div class="form-group">
                 <label>Password</label>
-                <a class="forgot-password" href="#">forgot password</a>
+                <a class="forgot-password" href="{{ route('password.request') }}">forgot password</a>
                 <input type="password" name="password" placeholder="Enter your password" required>
             </div>
 

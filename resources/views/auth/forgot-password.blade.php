@@ -2,23 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>Lupa Password - MyResep</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - MyResep</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
             font-family: 'Inter', sans-serif;
         }
+
         body {
             margin: 0;
             background-color: #fff;
             color: #000;
         }
+
         .container {
             display: flex;
             height: 100vh;
         }
+
         .form-section {
             flex: 1;
             padding: 60px;
@@ -26,38 +29,34 @@
             flex-direction: column;
             justify-content: center;
         }
+
         .form-section h2 {
             font-size: 32px;
             margin-bottom: 10px;
         }
+
         .form-section p {
             font-size: 14px;
             margin-bottom: 30px;
         }
+
         .form-group {
             margin-bottom: 20px;
         }
-        input[type="text"],
-        input[type="email"],
-        input[type="password"] {
+
+        input[type="email"] {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
         }
+
         label {
             font-size: 14px;
             margin-bottom: 5px;
             display: block;
         }
-        .checkbox {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .checkbox input {
-            margin-right: 10px;
-        }
+
         .btn {
             background-color: #133c1f;
             color: white;
@@ -68,15 +67,18 @@
             font-weight: 600;
             cursor: pointer;
         }
+
         .text-center {
             margin-top: 20px;
             font-size: 14px;
         }
+
         .text-center a {
             color: #133c1f;
             font-weight: 600;
             text-decoration: none;
         }
+
         .logo-section {
             flex: 1;
             background: #fff;
@@ -86,13 +88,31 @@
             align-items: center;
             border-left: 1px solid #ddd;
         }
+
         .logo-section img {
-            max-width: 200px;
+            max-width: 300px;
         }
+
         .logo-title {
             font-size: 36px;
             font-weight: bold;
             margin-top: 20px;
+            color: #133c1f;
+        }
+
+        .alert {
+            background-color: #e6ffed;
+            color: #207a3c;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .error {
+            color: #e3342f;
+            font-size: 13px;
+            margin-top: 5px;
         }
     </style>
 </head>
@@ -100,46 +120,38 @@
 
 <div class="container">
     <div class="form-section">
-        <h2>Get Started Now</h2>
-        <form action="{{ url('/register') }}" method="POST">
+        <h2>Lupa Password?</h2>
+        <p>Masukkan email Anda dan kami akan mengirimkan link reset password.</p>
+
+        @if (session('status'))
+            <div class="alert">
+                {{ session('status') }}
+            </div>
+        @endif
+
+        <form method="POST" action="{{ route('password.email') }}">
             @csrf
             <div class="form-group">
-                <label>Name</label>
-                <input type="text" name="username" required>
+                <label for="email">Alamat Email</label>
+                <input id="email" type="email" name="email" required autofocus>
+                @error('email')
+                    <div class="error">{{ $message }}</div>
+                @enderror
             </div>
 
-            <div class="form-group">
-                <label>Email address</label>
-                <input type="email" name="email" required>
-            </div>
-
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" name="password" required>
-            </div>
-
-            <div class="form-group">
-                <label>Confirm Password</label>
-                <input type="password" name="password_confirmation" required>
-            </div>
-
-            <div class="checkbox">
-                <input type="checkbox" required>
-                <span>I agree to the <a href="#">terms & policy</a></span>
-            </div>
-
-            <button class="btn" type="submit">Daftar</button>
+            <button type="submit" class="btn">Kirim Link Reset</button>
         </form>
 
         <div class="text-center">
-            Have an account? <a href="{{ route('login') }}">Sign In</a>
+            <a href="{{ route('login') }}">Kembali ke Login</a>
         </div>
     </div>
 
     <div class="logo-section">
-        <img src="{{ asset('images/myresep-logo.png') }}" alt="MyResep Logo">
-        <div class="logo-title">MYRESEP</div>
+    <img src="{{ asset('images/myresep-logo.png') }}" alt="MyResep Logo">
+        <div class="logo-title">MyResep</div>
     </div>
 </div>
+
 </body>
 </html>

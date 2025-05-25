@@ -1,78 +1,53 @@
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>MyResep Dashboard</title>
-        <script src="https://cdn.tailwindcss.com"></script>
-    </head>
-    <body class="bg-white text-gray-900 font-sans">
-
-        <!-- Navbar -->
-        <nav class="flex justify-between items-center px-8 py-4 border-b bg-white shadow-sm">
-            <div class="flex items-center space-x-2">
-                <img src="{{ asset('images/myresep-logo.png') }}" alt="MyResep Logo" class="h-8">
-                <span class="font-bold text-lg">MyResep</span>
-            </div>
-            <div class="flex items-center space-x-6 text-sm">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MyResep Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white text-gray-900 font-sans">
+    
+    <!-- Navbar -->
+    <nav class="flex justify-between items-center px-8 py-4 border-b bg-white shadow-sm">
+        <div class="flex items-center space-x-2">
+            <img src="{{ asset('images/myresep-logo.png') }}" alt="MyResep Logo" class="h-8">
+            <span class="font-bold text-lg">MyResep</span>
+        </div>
+        <div class="flex items-center space-x-6 text-sm">
+        @if(auth()->check() && auth()->user()->role === 'admin')
+            <a href="{{ route('admin.dashboard') }}" class="hover:underline">Beranda</a>
+        @else
+            <a href="{{ route('user.dashboard') }}" class="hover:underline">Beranda</a>
+        @endif
+        <a href="{{ route('favorites.index') }}" class="hover:underline">Favorit</a>
+        @if(auth()->check() && auth()->user()->role === 'admin')
             <a href="{{ route('masakans.tambah') }}" class="hover:underline">Tambah Resep</a>
-                <a href="{{ route('admin.dashboard') }}" class="hover:underline font-semibold text-green-800">Beranda</a>
-                <a href="{{ route('favorites.index') }}" class="hover:underline">Favorit</a>
+        @endif
+        
+            @auth
+                <a href="{{ route('profile') }}" class="hover:underline">Profil</a>
+                <form action="{{ route('logout') }}" method="POST" class="inline">
+                    @csrf
+                    <button type="submit" class="hover:underline">Logout</button>
+                </form>
+            @else
+                <a href="{{ route('login') }}" class="hover:underline font-semibold text-green-800">Sign in</a>
+            @endauth
+        </div>
+    </nav>
 
-                @auth
-                    <a href="{{ route('profile') }}" class="hover:underline">Profil</a>
-                    <form action="{{ route('logout') }}" method="POST" class="inline">
-                        @csrf
-                        <button type="submit" class="hover:underline">Logout</button>
-                    </form>
-                @else
-                    <a href="{{ route('login') }}" class="hover:underline font-semibold text-green-800">Sign in</a>
-                @endauth
-            </div>
-        </nav>
-
-        <!-- Hero Section -->
-        <section class="bg-green-900 text-white text-center py-12 px-4">
-        <h1 class="text-3xl font-bold mb-2">Discover Delicious Recipes</h1>
-        <p class="text-sm mb-4">Explore a wide range of amazing dishes</p>
-        <form action="{{ route('masakans.search') }}" method="GET">
-    <input type="text" name="query" placeholder="Cari Resep" class="px-4 py-2 rounded-md text-black w-64">
-    <button type="submit" class="bg-green-800 hover:bg-green-700 px-4 py-2 ml-2 rounded-md">Cari</button>
-</form>
+    <!-- Hero Section -->
+    <section class="bg-green-900 text-white text-center py-12 px-4">
+        <h1 class="text-3xl font-bold mb-2">{{ $kategoriLabel }}</h1>
     </section>
 
-<!-- Kategori -->
-<section class="text-center py-10">
-    <h2 class="text-2xl font-semibold mb-6">Kategori</h2>
-    <div class="flex justify-center space-x-12">
-        <a href="{{ route('masakans.kategori', 'pembuka') }}" class="group transition-transform hover:scale-110">
-            <div class="rounded-lg p-4 border border-transparent group-hover:border-green-200 group-hover:shadow-md">
-                <img src="/images/Logo-Pembuka.png" alt="Pembuka" class="h-16 mx-auto mb-2">
-                <p class="text-sm font-medium">Pembuka</p>
-            </div>
-        </a>
-        <a href="{{ route('masakans.kategori', 'utama') }}" class="group transition-transform hover:scale-110">
-            <div class="rounded-lg p-4 border border-transparent group-hover:border-green-200 group-hover:shadow-md">
-                <img src="/images/Logo-Utama.png" alt="Utama" class="h-16 mx-auto mb-2">
-                <p class="text-sm font-medium">Utama</p>
-            </div>
-        </a>
-        <a href="{{ route('masakans.kategori', 'penutup') }}" class="group transition-transform hover:scale-110">
-            <div class="rounded-lg p-4 border border-transparent group-hover:border-green-200 group-hover:shadow-md">
-                <img src="/images/Logo-Penutup.png" alt="Penutup" class="h-16 mx-auto mb-2">
-                <p class="text-sm font-medium">Penutup</p>
-            </div>
-        </a>
-    </div>
-</section>
-
-    <!-- Resep Terbaru -->
     <section class="px-6 py-8">
     <h2 class="text-xl font-bold mb-6">Resep Terbaru</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         @forelse ($masakans as $masakan)
             <div class="relative">
-
-                <!-- Edit button - positioned at top left (admin only) -->
+        
+                         <!-- Edit button - positioned at top left (admin only) -->
 @if(auth()->check() && auth()->user()->role === 'admin')
     <div class="absolute top-2 left-2 z-10">
         <a href="{{ route('masakans.edit', $masakan->id_Masakan) }}" class="bg-white rounded-full p-2 shadow-md hover:bg-gray-100 flex items-center justify-center">
@@ -139,14 +114,22 @@
 </section>
 
 
-        <!-- Footer -->
-        <footer class="border-t py-6 mt-10 text-sm text-center text-gray-500">
-            <p class="mb-2">© 2025 MyResep</p>
-            <div class="space-x-4">
-            <a href="{{ route('about.us') }}" class="hover:underline">About us</a>
-            <a href="https://linktr.ee/wavetobatis" target="_blank" rel="noopener noreferrer" class="hover:underline">Contact Us</a>
-            </div>
-        </footer>
 
-    </body>
-    </html>
+
+
+
+
+
+
+     
+    <!-- Footer -->
+    <footer class="border-t py-6 mt-10 text-sm text-center text-gray-500">
+        <p class="mb-2">© 2025 MyResep</p>
+        <div class="space-x-4">
+        <a href="{{ route('about.us') }}" class="hover:underline">About us</a>
+        <a href="https://linktr.ee/wavetobatis" target="_blank" rel="noopener noreferrer" class="hover:underline">Contact Us</a>
+        </div>
+    </footer>
+
+</body>
+</html>

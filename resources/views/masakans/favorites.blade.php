@@ -6,7 +6,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-white text-gray-900 font-sans">
-
+    
     <!-- Navbar -->
     <nav class="flex justify-between items-center px-8 py-4 border-b bg-white shadow-sm">
         <div class="flex items-center space-x-2">
@@ -14,9 +14,16 @@
             <span class="font-bold text-lg">MyResep</span>
         </div>
         <div class="flex items-center space-x-6 text-sm">
-            <a href="{{ route('user.dashboard') }}" class="hover:underline font-semibold text-green-800">Beranda</a>
-            <a href="{{ route('favorites.index') }}" class="hover:underline">Favorit</a>
-
+        @if(auth()->check() && auth()->user()->role === 'admin')
+            <a href="{{ route('admin.dashboard') }}" class="hover:underline">Beranda</a>
+        @else
+            <a href="{{ route('user.dashboard') }}" class="hover:underline">Beranda</a>
+        @endif
+            <a href="{{ route('favorites.index') }}" class="hover:underline font-semibold text-green-800">Favorit</a>
+        @if(auth()->check() && auth()->user()->role === 'admin')
+            <a href="{{ route('masakans.tambah') }}" class="hover:underline">Tambah Resep</a>
+        @endif
+        
             @auth
                 <a href="{{ route('profile') }}" class="hover:underline">Profil</a>
                 <form action="{{ route('logout') }}" method="POST" class="inline">
@@ -31,45 +38,24 @@
 
     <!-- Hero Section -->
     <section class="bg-green-900 text-white text-center py-12 px-4">
-        <h1 class="text-3xl font-bold mb-2">Discover Delicious Recipes</h1>
-        <p class="text-sm mb-4">Explore a wide range of amazing dishes</p>
-        <form action="{{ route('masakans.search') }}" method="GET">
-    <input type="text" name="query" placeholder="Cari Resep" class="px-4 py-2 rounded-md text-black w-64">
-    <button type="submit" class="bg-green-800 hover:bg-green-700 px-4 py-2 ml-2 rounded-md">Cari</button>
-</form>
+        <h1 class="text-3xl font-bold mb-2">Menu Favorit</h1>
     </section>
 
-<!-- Kategori -->
-    <section class="text-center py-10">
-    <h2 class="text-2xl font-semibold mb-6">Kategori</h2>
-    <div class="flex justify-center space-x-12">
-        <a href="{{ route('masakans.kategori', 'pembuka') }}" class="group transition-transform hover:scale-110">
-            <div class="rounded-lg p-4 border border-transparent group-hover:border-green-200 group-hover:shadow-md">
-                <img src="/images/Logo-Pembuka.png" alt="Pembuka" class="h-16 mx-auto mb-2">
-                <p class="text-sm font-medium">Pembuka</p>
-            </div>
-        </a>
-        <a href="{{ route('masakans.kategori', 'utama') }}" class="group transition-transform hover:scale-110">
-            <div class="rounded-lg p-4 border border-transparent group-hover:border-green-200 group-hover:shadow-md">
-                <img src="/images/Logo-Utama.png" alt="Utama" class="h-16 mx-auto mb-2">
-                <p class="text-sm font-medium">Utama</p>
-            </div>
-        </a>
-        <a href="{{ route('masakans.kategori', 'penutup') }}" class="group transition-transform hover:scale-110">
-            <div class="rounded-lg p-4 border border-transparent group-hover:border-green-200 group-hover:shadow-md">
-                <img src="/images/Logo-Penutup.png" alt="Penutup" class="h-16 mx-auto mb-2">
-                <p class="text-sm font-medium">Penutup</p>
-            </div>
-        </a>
-    </div>
-</section>
-
-<!-- Resep Terbaru -->
-<section class="px-6 py-8">
+    <section class="px-6 py-8">
     <h2 class="text-xl font-bold mb-6">Resep Terbaru</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        @forelse ($masakans as $masakan)
+        @forelse ($favoriteRecipes as $masakan)
             <div class="relative">
+    <!-- Edit button - positioned at top left (admin only) -->
+    @if(auth()->check() && auth()->user()->role === 'admin')
+        <div class="absolute top-2 left-2 z-10">
+            <a href="{{ route('masakans.edit', $masakan->id_Masakan) }}" class="bg-white rounded-full p-2 shadow-md hover:bg-gray-100 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-gray-600">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                </svg>
+            </a>
+        </div>
+    @endif
                 <!-- Bookmark button - positioned at top right -->
                 @auth
                     <div class="absolute top-2 right-2 z-10">
@@ -126,7 +112,7 @@
     </div>
 </section>
 
-
+     
     <!-- Footer -->
     <footer class="border-t py-6 mt-10 text-sm text-center text-gray-500">
         <p class="mb-2">© 2025 MyResep</p>
