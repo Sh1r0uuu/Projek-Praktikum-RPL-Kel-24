@@ -64,7 +64,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     
     // Protected Masakan routes (CRUD operations except show)
-    Route::get('/masakans/tambah', [MasakanController::class, 'create'])->name('masakans.tambah');
+    Route::get ('/tambah/tambah', [MasakanController::class, 'create'])->name('masakans.tambah');
     Route::post('/masakans', [MasakanController::class, 'store'])->name('masakans.store');
     Route::get('/masakans/{masakan}/edit', [MasakanController::class, 'edit'])->name('masakans.edit');
     Route::put('/masakans/{masakan}', [MasakanController::class, 'update'])->name('masakans.update');
